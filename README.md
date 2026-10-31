@@ -9,6 +9,18 @@
 
 ---
 
+<p align="center">
+  <img src="docs/architecture.png" alt="How the pools are keyed" width="100%">
+</p>
+
+### How the pools are keyed
+
+A multi-pool staking protocol where users deposit ERC-20 tokens and accrue rewards over time. The interesting part is the keying strategy: pool identifiers are `abi.encodePacked(token, salt, params)` and user positions are `abi.encodePacked(poolId, user)`, both deterministic and collision-free by construction. Packing the related fields also cuts SSTOREs and gas. Each pool tracks `accRewardPerShare` and `lastUpdateTime`, while each user carries `rewardDebt` so pending rewards settle correctly on every interaction.
+
+
+
+---
+
 ## 🎯 What it does
 
 A yield-farming protocol where users stake ERC-20 tokens into reward pools and earn rewards over time. Beyond the standard stake/withdraw/claim flow, this project uses `abi.encodePacked` for:
